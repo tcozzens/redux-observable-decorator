@@ -40,7 +40,7 @@ function isOptions(...instanceOrOptions) {
 export function createEpics<T extends Action, S>(
   epic,
   ...epicsOrOptions
-): EpicMiddleware<T, S> {
+): EpicMiddleware {
   let instances;
   let options;
   if (isOptions(...epicsOrOptions)) {
@@ -56,6 +56,14 @@ export function createEpics<T extends Action, S>(
   );
 
   const epics = [].concat(...epicsMetaData);
-  const rootEpic = combineEpics<T, S>(...epics);
-  return createEpicMiddleware<T, S>(rootEpic, options);
+  const rootEpic = combineEpics(...epics);
+  // return createEpicMiddleware<T, S>(rootEpic, options);
+
+
+  // const epicMiddleware = createEpicMiddleware(rootEpic, options);
+  const epicMiddleware = createEpicMiddleware();
+
+epicMiddleware.run(rootEpic, options);
+
+  return epicMiddleware;
 }
